@@ -4,6 +4,7 @@ function xxm(props, children) {
   if (props.style) { div.style = props.style }
   if (props.bgImage) { div.style.backgroundImage = `url("${props.bgImage}")` }
   if (props.tilesetImage) { div.style.setProperty('--tileset-image', `url("${props.tilesetImage}")`) }
+  div.roadblocks = props.roadblocks;
   div.append(...children);
   return div;
 }
@@ -26,6 +27,16 @@ xxm.tile = function(x, y, tx, ty) {
   return div;
 };
 
+xxm.findTiles = function(root, x, y) {
+  let tiles = [];
+  for (let tile of root.querySelectorAll('.tile')) {
+    let x2 = Number(tile.style.getPropertyValue('--x'));
+    let y2 = Number(tile.style.getPropertyValue('--y'));
+    if (x === x2 && y === y2) { tiles.push(tile) }
+  }
+  return tiles;
+};
+
 xxm.sprite = function(x, y, image, w, h) {
   let div = document.createElement('div');
   div.className = 'sprite';
@@ -39,6 +50,37 @@ xxm.sprite = function(x, y, image, w, h) {
   div.append(internal);
 
   return div;
+};
+
+xxm.spriteUnblocked = function(sprite) {
+  let root = sprite.closest('.xxm');
+  let sx = Number(sprite.style.getPropertyValue('--x'));
+  let sy = Number(sprite.style.getPropertyValue('--y'));
+  let dir = sprite.style.getPropertyValue('--xxm-sy') || '0';
+
+  for (let tile of xxm.findTiles(root, sx, sy)) {
+    let tx = Number(tile.style.getPropertyValue('--tx'));
+    let ty = Number(tile.style.getPropertyValue('--ty'));
+    let roadblocks = root.roadblocks[ty][tx] || 'OOOO';
+    if (roadblocks[dir] === 'X') { return false }
+  }
+
+  let nsx = sx, nsy = sy, incomingDir;
+  switch (dir) {
+    case '0': nsy++; incomingDir = 1; break;
+    case '1': nsy--; incomingDir = 0; break;
+    case '2': nsx++; incomingDir = 3; break;
+    case '3': nsx--; incomingDir = 2; break;
+  }
+
+  for (let tile of xxm.findTiles(root, nsx, nsy)) {
+    let tx = Number(tile.style.getPropertyValue('--tx'));
+    let ty = Number(tile.style.getPropertyValue('--ty'));
+    let roadblocks = root.roadblocks[ty][tx] || 'OOOO';
+    if (roadblocks[incomingDir] === 'X') { return false }
+  }
+
+  return true;
 };
 
 xxm.hero = function(spr) {
@@ -98,12 +140,17 @@ walkFrame.onTransition = ev => {
     case 'left': sprite.style.setProperty('--xxm-sy', 3); break;
   }
 
-  let dir = sprite.style.getPropertyValue('--xxm-sy') || '0';
-  switch (dir) {
-    case '0': sprite.style.setProperty('--y', Number(sprite.style.getPropertyValue('--y')) + 1); break;
-    case '1': sprite.style.setProperty('--y', Number(sprite.style.getPropertyValue('--y')) - 1); break;
-    case '2': sprite.style.setProperty('--x', Number(sprite.style.getPropertyValue('--x')) + 1); break;
-    case '3': sprite.style.setProperty('--x', Number(sprite.style.getPropertyValue('--x')) - 1); break;
+  if (xxm.spriteUnblocked(sprite)) {
+    let dir = sprite.style.getPropertyValue('--xxm-sy') || '0';
+    switch (dir) {
+      case '0': sprite.style.setProperty('--y', Number(sprite.style.getPropertyValue('--y')) + 1); break;
+      case '1': sprite.style.setProperty('--y', Number(sprite.style.getPropertyValue('--y')) - 1); break;
+      case '2': sprite.style.setProperty('--x', Number(sprite.style.getPropertyValue('--x')) + 1); break;
+      case '3': sprite.style.setProperty('--x', Number(sprite.style.getPropertyValue('--x')) - 1); break;
+    }
+  } else {
+    sprite.classList.remove('walking');
+    sprite.removeEventListener('transitionend', walkFrame.onTransition);
   }
 };
 
