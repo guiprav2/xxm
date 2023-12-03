@@ -37,9 +37,10 @@ xxm.findTiles = function(root, x, y) {
   return tiles;
 };
 
-xxm.sprite = function(x, y, image, w, h) {
+xxm.sprite = function(x, y, image, w, h, props) {
   let div = document.createElement('div');
   div.className = 'sprite';
+  div.props = props;
 
   for (let [k, v] of Object.entries({ '--x': x, '--y': y, '--xxm-sw': w, '--xxm-sh': h })) {
     div.style.setProperty(k, v);
@@ -50,6 +51,15 @@ xxm.sprite = function(x, y, image, w, h) {
   div.append(internal);
 
   return div;
+};
+
+xxm.findSprite = function(root, x, y) {
+  for (let sprite of root.querySelectorAll('.sprite')) {
+    let x2 = Number(sprite.style.getPropertyValue('--x'));
+    let y2 = Number(sprite.style.getPropertyValue('--y'));
+    if (x === x2 && y === y2) { return sprite }
+  }
+  return null;
 };
 
 xxm.spriteUnblocked = function(sprite) {
@@ -80,7 +90,7 @@ xxm.spriteUnblocked = function(sprite) {
     if (roadblocks[incomingDir] === 'X') { return false }
   }
 
-  return true;
+  return !xxm.findSprite(root, nsx, nsy);
 };
 
 xxm.hero = function(spr) {
@@ -97,6 +107,7 @@ addEventListener('keydown', ev => {
     case 'ArrowUp': kbdst.up ??= 0; kbdst.up++; kbdst.last = 'up'; break;
     case 'ArrowRight': kbdst.right ??= 0; kbdst.right++; kbdst.last = 'right'; break;
     case 'ArrowLeft': kbdst.left ??= 0; kbdst.left++; kbdst.last = 'left'; break;
+    case 'x': xxm.onAction(); break;
     default: return;
   }
 });
@@ -155,5 +166,25 @@ walkFrame.onTransition = ev => {
 };
 
 walkFrame();
+
+xxm.onAction = async function() {
+  let { sprite } = xxm.hero;
+  if (!sprite || sprite.classList.contains('walking')) { return }
+
+  let sx = Number(sprite.style.getPropertyValue('--x'));
+  let sy = Number(sprite.style.getPropertyValue('--y'));
+  let dir = sprite.style.getPropertyValue('--xxm-sy') || '0';
+  let nsx = sx, nsy = sy;
+  switch (dir) {
+    case '0': nsy++; break;
+    case '1': nsy--; break;
+    case '2': nsx++; break;
+    case '3': nsx--; break;
+  }
+
+  let root = sprite.closest('.xxm');
+  let sprite2 = xxm.findSprite(root, nsx, nsy);
+  await sprite2?.props?.onAction?.();
+};
 
 export default xxm;

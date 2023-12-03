@@ -37,6 +37,7 @@ body {
   width: var(--xxm-tw);
   height: var(--xxm-th);
   transition: var(--xxm-walk-duration) linear left, var(--xxm-walk-duration) linear top;
+  z-index: var(--y);
 }
 
 .xxm .sprite > div {
