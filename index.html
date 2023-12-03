@@ -2,12 +2,16 @@
 <meta charset="utf-8">
 <link rel="stylesheet" href="xxm.css">
 
-<body>
+<style>
+  * { box-sizing: border-box }
+</style>
+
+<body style="display: flex; flex-direction: column; min-height: 100vh; padding: 32px; background-image: url('bg.png')">
   <script type="module">
     import xxm from './xxm.js';
 
     document.body.append(xxm({
-      style: 'height: 100vh',
+      style: 'flex: 1',
       bgImage: 'dungeon_ground.png',
       tilesetImage: 'dungeon.png',
 
