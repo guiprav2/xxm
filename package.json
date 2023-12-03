@@ -1,0 +1,12 @@
+{
+  "name": "xxm",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "serve ."
+  },
+  "author": "Gui Prá (gui@guiprav.com)",
+  "license": "AGPL-3.0+",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}

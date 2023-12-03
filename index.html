@@ -1,0 +1,22 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="xxm.css">
+
+<body>
+  <script type="module">
+    import xxm from './xxm.js';
+
+    document.body.append(xxm({
+      style: 'height: 100vh',
+      bgImage: 'dungeon_ground.png',
+      tilesetImage: 'dungeon.png',
+    }, [
+      xxm.layer([
+        xxm.tile(0, 0, 0, 1),
+        xxm.tile(1, 1, 0, 1),
+        xxm.tile(2, 2, 0, 1),
+        xxm.hero(xxm.sprite(1, 2, 'siren.png', '78px', '48px')),
+      ]),
+    ]));
+  </script>
+</body>
