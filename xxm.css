@@ -40,6 +40,10 @@ body {
   z-index: var(--y);
 }
 
+.xxm .sprite.hero {
+  z-index: calc(var(--y) + 1);
+}
+
 .xxm .sprite > div {
   position: absolute;
   left: calc(-1 * (var(--xxm-sw) - var(--xxm-tw)) / 2);
