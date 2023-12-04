@@ -1,8 +1,8 @@
 :root {
-  --xxm-tw: 32px;
-  --xxm-th: 32px;
-  --xxm-anim-duration: 0.7s;
-  --xxm-walk-duration: 0.5s;
+  --tw: 32px;
+  --th: 32px;
+  --anim-duration: 0.7s;
+  --walk-duration: 0.5s;
   --x: 0;
   --y: 0;
 }
@@ -12,7 +12,7 @@ body {
 }
 
 .xxm {
-  background-size: var(--xxm-tw) var(--xxm-th);
+  background-size: var(--tw) var(--th);
   background-repeat: repeat;
 }
 
@@ -22,21 +22,21 @@ body {
 
 .xxm .tile {
   position: absolute;
-  left: calc(var(--x) * var(--xxm-tw));
-  top: calc(var(--y) * var(--xxm-th));
-  width: var(--xxm-tw);
-  height: var(--xxm-th);
+  left: calc(var(--x) * var(--tw));
+  top: calc(var(--y) * var(--th));
+  width: var(--tw);
+  height: var(--th);
   background-image: var(--tileset-image);
-  background-position: calc(var(--tx) * var(--xxm-tw) * -1) calc(var(--ty) * var(--xxm-th) * -1);
+  background-position: calc(var(--tx) * var(--tw) * -1) calc(var(--ty) * var(--th) * -1);
 }
 
 .xxm .sprite {
   position: absolute;
-  left: calc(var(--x) * var(--xxm-tw));
-  top: calc(var(--y) * var(--xxm-th));
-  width: var(--xxm-tw);
-  height: var(--xxm-th);
-  transition: var(--xxm-walk-duration) linear left, var(--xxm-walk-duration) linear top;
+  left: calc(var(--x) * var(--tw));
+  top: calc(var(--y) * var(--th));
+  width: var(--tw);
+  height: var(--th);
+  transition: var(--walk-duration) linear left, var(--walk-duration) linear top;
   z-index: var(--y);
 }
 
@@ -46,21 +46,21 @@ body {
 
 .xxm .sprite > div {
   position: absolute;
-  left: calc(-1 * (var(--xxm-sw) - var(--xxm-tw)) / 2);
-  top: calc(-1 * var(--xxm-sh) + var(--xxm-th));
-  width: var(--xxm-sw);
-  height: var(--xxm-sh);
-  background-position-y: calc(var(--xxm-sy) * var(--xxm-sh));
+  left: calc(-1 * (var(--sw) - var(--tw)) / 2);
+  top: calc(-1 * var(--sh) + var(--th));
+  width: var(--sw);
+  height: var(--sh);
+  background-position-y: calc(var(--sy) * var(--sh));
 }
 
 @keyframes frames {
   to {
-    background-position-x: calc(-4 * var(--xxm-sw));
+    background-position-x: calc(-4 * var(--sw));
   }
 }
 
 .xxm .sprite.animate > div,
 .xxm .sprite.walking > div {
   animation: frames steps(4, end) infinite;
-  animation-duration: var(--xxm-anim-duration);
+  animation-duration: var(--anim-duration);
 }

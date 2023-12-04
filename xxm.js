@@ -42,7 +42,7 @@ xxm.sprite = function(x, y, image, w, h, props) {
   div.className = 'sprite';
   div.props = props;
 
-  for (let [k, v] of Object.entries({ '--x': x, '--y': y, '--xxm-sw': w, '--xxm-sh': h })) {
+  for (let [k, v] of Object.entries({ '--x': x, '--y': y, '--sw': w, '--sh': h })) {
     div.style.setProperty(k, v);
   }
 
@@ -66,7 +66,7 @@ xxm.spriteUnblocked = function(sprite) {
   let root = sprite.closest('.xxm');
   let sx = Number(sprite.style.getPropertyValue('--x'));
   let sy = Number(sprite.style.getPropertyValue('--y'));
-  let dir = sprite.style.getPropertyValue('--xxm-sy') || '0';
+  let dir = sprite.style.getPropertyValue('--sy') || '0';
 
   for (let tile of xxm.findTiles(root, sx, sy)) {
     let tx = Number(tile.style.getPropertyValue('--tx'));
@@ -145,14 +145,14 @@ walkFrame.onTransition = ev => {
   }
 
   switch (kbdst.last) {
-    case 'down': sprite.style.setProperty('--xxm-sy', 0); break;
-    case 'up': sprite.style.setProperty('--xxm-sy', 1); break;
-    case 'right': sprite.style.setProperty('--xxm-sy', 2); break;
-    case 'left': sprite.style.setProperty('--xxm-sy', 3); break;
+    case 'down': sprite.style.setProperty('--sy', 0); break;
+    case 'up': sprite.style.setProperty('--sy', 1); break;
+    case 'right': sprite.style.setProperty('--sy', 2); break;
+    case 'left': sprite.style.setProperty('--sy', 3); break;
   }
 
   if (xxm.spriteUnblocked(sprite)) {
-    let dir = sprite.style.getPropertyValue('--xxm-sy') || '0';
+    let dir = sprite.style.getPropertyValue('--sy') || '0';
     switch (dir) {
       case '0': sprite.style.setProperty('--y', Number(sprite.style.getPropertyValue('--y')) + 1); break;
       case '1': sprite.style.setProperty('--y', Number(sprite.style.getPropertyValue('--y')) - 1); break;
@@ -173,7 +173,7 @@ xxm.onAction = async function() {
 
   let sx = Number(sprite.style.getPropertyValue('--x'));
   let sy = Number(sprite.style.getPropertyValue('--y'));
-  let dir = sprite.style.getPropertyValue('--xxm-sy') || '0';
+  let dir = sprite.style.getPropertyValue('--sy') || '0';
   let nsx = sx, nsy = sy;
   switch (dir) {
     case '0': nsy++; break;
