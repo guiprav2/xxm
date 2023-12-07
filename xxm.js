@@ -103,6 +103,17 @@ xxm.spriteUnblocked = function(sprite) {
   return !xxm.findSprite(map, nsx, nsy);
 };
 
+xxm.sprite.animate = function(sprite, anim) {
+  let resolve, promise = new Promise(res => resolve = res);
+  let classNames = ['animate__animated', `animate__${anim}`];
+  sprite.classList.add(...classNames);
+  sprite.addEventListener('animationend', () => {
+    sprite.classList.remove(...classNames);
+    resolve();
+  }, { once: true });
+  return promise;
+};
+
 xxm.hero = function(spr) {
   spr.classList.add('hero');
   xxm.hero.sprite = spr;

@@ -1,6 +1,7 @@
 <!doctype html>
 <meta charset="utf-8">
 <link rel="stylesheet" href="xxm.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 <link rel="preload" href="msgbox.png" as="image">
 
 <style>
@@ -11,6 +12,7 @@
   <script type="module">
     import xxm from './xxm.js';
 
+    let dracula;
     document.body.append(xxm('640px', '480px', { style: 'box-shadow: 1px 1px 1px #000000ba' }, [
       xxm.map({
         bgImage: 'dungeon_ground.png',
@@ -25,9 +27,10 @@
           xxm.tile(1, 1, 0, 1),
           xxm.tile(2, 2, 0, 1),
           xxm.hero(xxm.sprite(1, 2, 'siren.png', '78px', '48px')),
-          xxm.sprite(4, 1, 'dracula.png', '111px', '62px', {
+          dracula = xxm.sprite(4, 1, 'dracula.png', '111px', '62px', {
             onAction: async () => {
               await xxm.ui.msgbox('THIS IS DRACULA.');
+              await xxm.sprite.animate(dracula, 'shakeX');
               await xxm.ui.msgbox('YOU NO MORE NOW.');
             },
           }),
