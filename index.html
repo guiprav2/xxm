@@ -32,6 +32,7 @@
           dracula = xxm.sprite(4, 1, 'dracula.png', '111px', '62px', {
             onAction: async () => {
               await xxm.ui.msgbox('THIS IS DRACULA.');
+              await xxm.sprite.walk(dracula, [2, 3, 2, 3, 10]);
               await Promise.all([
                 xxm.playSound('Attack2.ogg'),
                 xxm.sprite.animate(dracula, 'flip'),

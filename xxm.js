@@ -114,6 +114,36 @@ xxm.sprite.animate = function(sprite, anim) {
   return promise;
 };
 
+xxm.sprite.step = function(sprite, dir, manageClassName = true) {
+  let resolve, promise = new Promise(res => resolve = res);
+  if (Number(dir) < 10) {
+    sprite.style.setProperty('--sy', dir);
+    manageClassName && sprite.classList.add('walking');
+    switch (String(dir)) {
+      case '0': sprite.style.setProperty('--y', Number(sprite.style.getPropertyValue('--y')) + 1); break;
+      case '1': sprite.style.setProperty('--y', Number(sprite.style.getPropertyValue('--y')) - 1); break;
+      case '2': sprite.style.setProperty('--x', Number(sprite.style.getPropertyValue('--x')) + 1); break;
+      case '3': sprite.style.setProperty('--x', Number(sprite.style.getPropertyValue('--x')) - 1); break;
+    }
+    sprite.addEventListener('transitionend', () => {
+      manageClassName && sprite.classList.remove('walking');
+      resolve();
+    }, { once: true });
+  } else {
+    sprite.style.setProperty('--sy', Number(dir) - 10);
+    resolve();
+  }
+  return promise;
+};
+
+xxm.sprite.walk = async function(sprite, route) {
+  sprite.classList.add('walking');
+  for (let dir of route) {
+    await xxm.sprite.step(sprite, dir, false);
+  }
+  sprite.classList.remove('walking');
+};
+
 xxm.hero = function(spr) {
   spr.classList.add('hero');
   xxm.hero.sprite = spr;
