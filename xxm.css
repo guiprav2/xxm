@@ -36,7 +36,6 @@ body {
   top: calc(var(--y) * var(--th));
   width: var(--tw);
   height: var(--th);
-  transition: var(--walk-duration) linear left, var(--walk-duration) linear top;
   z-index: var(--y);
 }
 
@@ -57,6 +56,10 @@ body {
   to {
     background-position-x: calc(-4 * var(--sw));
   }
+}
+
+.xxm .sprite.walking {
+  transition: var(--walk-duration) linear left, var(--walk-duration) linear top;
 }
 
 .xxm .sprite.animate > div,
