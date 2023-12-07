@@ -99,6 +99,10 @@ body {
   z-index: 100000;
 }
 
+.xxm .map > .cursor:empty {
+  display: none;
+}
+
 .xxm .map > .cursor::after {
   content: '';
   position: absolute;
