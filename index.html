@@ -33,6 +33,7 @@
         xxm.hero(xxm.sprite(1, 2, 'siren.png', '78px', '48px')),
         dracula = xxm.sprite(4, 1, 'dracula.png', '111px', '62px', {
           onAction: async () => {
+            xxm.map.setCursor(xxm.tile(0, 0, 0, 1));
             await xxm.ui.msgbox('THIS IS DRACULA.');
             await xxm.sprite.walk(dracula, [2, 3, 2, 3, 10]);
             await Promise.all([

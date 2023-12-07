@@ -24,6 +24,7 @@ xxm.map = function(props, children) {
       cursor.className = 'cursor';
       div.append(cursor);
       div.addEventListener('mousemove', xxm.map.onMouseMove);
+      cursor.addEventListener('click', xxm.map.onCursorClick);
       xxm.root.state.editModeCursor = cursor;
     }
   });
@@ -44,6 +45,19 @@ xxm.map.onMouseMove = function(ev) {
   let y = Math.floor((clientY - rect.top) / 32);
   editModeCursor.style.setProperty('--x', x);
   editModeCursor.style.setProperty('--y', y);
+};
+
+xxm.map.onCursorClick = function(ev) {
+  let cursor = ev.target.closest('.cursor');
+  let map = cursor.closest('.map');
+  let unit = cursor.childNodes[0]?.cloneNode?.(true);
+  if (!unit) { return }
+  let x = Number(cursor.style.getPropertyValue('--x'));
+  let y = Number(cursor.style.getPropertyValue('--y'));
+  for (let tile of xxm.findTiles(map, x, y)) { tile.remove() }
+  unit.style.setProperty('--x', x);
+  unit.style.setProperty('--y', y);
+  map.append(unit);
 };
 
 xxm.tile = function(x, y, tx, ty) {
