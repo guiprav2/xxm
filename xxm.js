@@ -30,6 +30,12 @@ xxm.map = function(props, children) {
   return div;
 };
 
+xxm.map.setCursor = function(div) {
+  let { editModeCursor } = xxm.root.state;
+  editModeCursor.innerHTML = '';
+  editModeCursor.append(div);
+};
+
 xxm.map.onMouseMove = function(ev) {
   let { clientX, clientY } = ev;
   let { editModeCursor } = xxm.root.state;
