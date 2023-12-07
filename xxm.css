@@ -26,13 +26,10 @@ body {
 }
 
 .xxm .map {
+  position: relative;
   flex: 1;
   background-size: var(--tw) var(--th);
   background-repeat: repeat;
-}
-
-.xxm .map .layer {
-  position: relative;
 }
 
 .xxm .map .tile {
@@ -45,6 +42,11 @@ body {
   background-position: calc(var(--tx) * var(--tw) * -1) calc(var(--ty) * var(--th) * -1);
 }
 
+.xxm .map > .cursor .tile {
+  left: 0;
+  top: 0;
+}
+
 .xxm .map .sprite {
   position: absolute;
   left: calc(var(--x) * var(--tw));
@@ -52,6 +54,11 @@ body {
   width: var(--tw);
   height: var(--th);
   z-index: var(--y);
+}
+
+.xxm .map > .cursor .sprite {
+  left: 0;
+  top: 0;
 }
 
 .xxm .map .sprite.hero {
@@ -83,6 +90,25 @@ body {
   animation-duration: var(--anim-duration);
 }
 
+.xxm .map > .cursor {
+  position: absolute;
+  left: calc(var(--x) * var(--tw));
+  top: calc(var(--y) * var(--th));
+  width: var(--tw);
+  height: var(--th);
+  z-index: 100000;
+}
+
+.xxm .map > .cursor::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  border: 2px solid aliceblue;
+}
+
 .xxm .ui {
   position: absolute;
   left: 0;
@@ -111,7 +137,7 @@ body {
   25%, 75% { opacity: 0 }
 }
 
-.xxm .ui .msgbox .cursor {
+.xxm .ui .msgbox > .cursor {
   display: inline-block;
   transform: scale(80%);
   animation-name: flash;

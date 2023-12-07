@@ -4,7 +4,9 @@ function xxm(width, height, props, children) {
   if (props.style) { div.style = props.style }
   div.style.width = width;
   div.style.height = height;
+  div.state = { editMode: props.editMode };
   div.append(...children);
+  xxm.root = div;
   return div;
 }
 
@@ -16,14 +18,26 @@ xxm.map = function(props, children) {
   if (props.tilesetImage) { div.style.setProperty('--tileset-image', `url("${props.tilesetImage}")`) }
   div.roadblocks = props.roadblocks;
   div.append(...children);
+  requestAnimationFrame(() => {
+    if (xxm.root.state.editMode) {
+      let cursor = document.createElement('div');
+      cursor.className = 'cursor';
+      div.append(cursor);
+      div.addEventListener('mousemove', xxm.map.onMouseMove);
+      xxm.root.state.editModeCursor = cursor;
+    }
+  });
   return div;
 };
 
-xxm.layer = function(children) {
-  let div = document.createElement('div');
-  div.className = 'layer';
-  div.append(...children);
-  return div;
+xxm.map.onMouseMove = function(ev) {
+  let { clientX, clientY } = ev;
+  let { editModeCursor } = xxm.root.state;
+  let rect = xxm.root.getBoundingClientRect();
+  let x = Math.floor((clientX - rect.left) / 32);
+  let y = Math.floor((clientY - rect.top) / 32);
+  editModeCursor.style.setProperty('--x', x);
+  editModeCursor.style.setProperty('--y', y);
 };
 
 xxm.tile = function(x, y, tx, ty) {

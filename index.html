@@ -15,7 +15,10 @@
     import xxm from './xxm.js';
 
     let dracula;
-    document.body.append(xxm('640px', '480px', { style: 'box-shadow: 1px 1px 1px #000000ba' }, [
+    document.body.append(xxm('640px', '480px', {
+      editMode: true,
+      style: 'box-shadow: 1px 1px 1px #000000ba',
+    }, [
       xxm.map({
         bgImage: 'dungeon_ground.png',
         tilesetImage: 'dungeon.png',
@@ -24,27 +27,25 @@
           ['XOXX', 'OOXX', 'OOXX', 'OOXX', 'OOXX', 'XXXX', 'OOOO', 'OOOO', 'XXXX', 'XXXX', 'XXXX', 'XXXX', 'XXXX', 'XXXX', 'OOOO', 'OOOO', 'OOOO'],
         ],
       }, [
-        xxm.layer([
-          xxm.tile(0, 0, 0, 1),
-          xxm.tile(1, 1, 0, 1),
-          xxm.tile(2, 2, 0, 1),
-          xxm.hero(xxm.sprite(1, 2, 'siren.png', '78px', '48px')),
-          dracula = xxm.sprite(4, 1, 'dracula.png', '111px', '62px', {
-            onAction: async () => {
-              await xxm.ui.msgbox('THIS IS DRACULA.');
-              await xxm.sprite.walk(dracula, [2, 3, 2, 3, 10]);
-              await Promise.all([
-                xxm.playSound('Attack2.ogg'),
-                xxm.sprite.animate(dracula, 'flip'),
-              ]);
-              await Promise.all([
-                xxm.playSound('Absorb1.ogg'),
-                xxm.sprite.animate(dracula, 'flash'),
-              ]);
-              await xxm.ui.msgbox('YOU NO MORE NOW.');
-            },
-          }),
-        ]),
+        xxm.tile(0, 0, 0, 1),
+        xxm.tile(1, 1, 0, 1),
+        xxm.tile(2, 2, 0, 1),
+        xxm.hero(xxm.sprite(1, 2, 'siren.png', '78px', '48px')),
+        dracula = xxm.sprite(4, 1, 'dracula.png', '111px', '62px', {
+          onAction: async () => {
+            await xxm.ui.msgbox('THIS IS DRACULA.');
+            await xxm.sprite.walk(dracula, [2, 3, 2, 3, 10]);
+            await Promise.all([
+              xxm.playSound('Attack2.ogg'),
+              xxm.sprite.animate(dracula, 'flip'),
+            ]);
+            await Promise.all([
+              xxm.playSound('Absorb1.ogg'),
+              xxm.sprite.animate(dracula, 'flash'),
+            ]);
+            await xxm.ui.msgbox('YOU NO MORE NOW.');
+          },
+        }),
       ]),
       xxm.ui(),
     ]));
