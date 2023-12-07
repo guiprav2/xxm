@@ -10,26 +10,26 @@
   <script type="module">
     import xxm from './xxm.js';
 
-    document.body.append(xxm({
-      style: 'flex: 1',
-      bgImage: 'dungeon_ground.png',
-      tilesetImage: 'dungeon.png',
-
-      roadblocks: [
-        ['OOOO', 'OOXX', 'OOXX', 'OOXX', 'OOXX', 'XXXX', 'OOOO', 'OOOO', 'XXXX', 'XXXX', 'OOOO', 'OOOO', 'OOOO', 'OOOO', 'OOOO', 'OOOO', 'OOOO'],
-        ['XOXX', '00XX', 'OOXX', 'OOXX', 'OOXX', 'XXXX', 'OOOO', 'OOOO', 'XXXX', 'XXXX', 'XXXX', 'XXXX', 'XXXX', 'XXXX', 'OOOO', 'OOOO', 'OOOO'],
-      ],
-    }, [
-      xxm.layer([
-        xxm.tile(0, 0, 0, 1),
-        xxm.tile(1, 1, 0, 1),
-        xxm.tile(2, 2, 0, 1),
-        xxm.hero(xxm.sprite(1, 2, 'siren.png', '78px', '48px')),
-
-        xxm.sprite(4, 1, 'dracula.png', '111px', '62px', {
-          onAction: () => alert('DRACULA'),
-        }),
+    document.body.append(xxm({ style: 'flex: 1' }, [
+      xxm.map({
+        bgImage: 'dungeon_ground.png',
+        tilesetImage: 'dungeon.png',
+        roadblocks: [
+          ['OOOO', 'OOXX', 'OOXX', 'OOXX', 'OOXX', 'XXXX', 'OOOO', 'OOOO', 'XXXX', 'XXXX', 'OOOO', 'OOOO', 'OOOO', 'OOOO', 'OOOO', 'OOOO', 'OOOO'],
+          ['XOXX', 'OOXX', 'OOXX', 'OOXX', 'OOXX', 'XXXX', 'OOOO', 'OOOO', 'XXXX', 'XXXX', 'XXXX', 'XXXX', 'XXXX', 'XXXX', 'OOOO', 'OOOO', 'OOOO'],
+        ],
+      }, [
+        xxm.layer([
+          xxm.tile(0, 0, 0, 1),
+          xxm.tile(1, 1, 0, 1),
+          xxm.tile(2, 2, 0, 1),
+          xxm.hero(xxm.sprite(1, 2, 'siren.png', '78px', '48px')),
+          xxm.sprite(4, 1, 'dracula.png', '111px', '62px', {
+            onAction: () => alert('DRACULA'),
+          }),
+        ]),
       ]),
+      xxm.ui(),
     ]));
   </script>
 </body>

@@ -12,15 +12,20 @@ body {
 }
 
 .xxm {
+  display: flex;
+}
+
+.xxm .map {
+  flex: 1;
   background-size: var(--tw) var(--th);
   background-repeat: repeat;
 }
 
-.xxm .layer {
+.xxm .map .layer {
   position: relative;
 }
 
-.xxm .tile {
+.xxm .map .tile {
   position: absolute;
   left: calc(var(--x) * var(--tw));
   top: calc(var(--y) * var(--th));
@@ -30,7 +35,7 @@ body {
   background-position: calc(var(--tx) * var(--tw) * -1) calc(var(--ty) * var(--th) * -1);
 }
 
-.xxm .sprite {
+.xxm .map .sprite {
   position: absolute;
   left: calc(var(--x) * var(--tw));
   top: calc(var(--y) * var(--th));
@@ -39,11 +44,11 @@ body {
   z-index: var(--y);
 }
 
-.xxm .sprite.hero {
+.xxm .map .sprite.hero {
   z-index: calc(var(--y) + 1);
 }
 
-.xxm .sprite > div {
+.xxm .map .sprite > div {
   position: absolute;
   left: calc(-1 * (var(--sw) - var(--tw)) / 2);
   top: calc(-1 * var(--sh) + var(--th));
@@ -58,12 +63,12 @@ body {
   }
 }
 
-.xxm .sprite.walking {
+.xxm .map .sprite.walking {
   transition: var(--walk-duration) linear left, var(--walk-duration) linear top;
 }
 
-.xxm .sprite.animate > div,
-.xxm .sprite.walking > div {
+.xxm .map .sprite.animate > div,
+.xxm .map .sprite.walking > div {
   animation: frames steps(4, end) infinite;
   animation-duration: var(--anim-duration);
 }

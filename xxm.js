@@ -2,12 +2,20 @@ function xxm(props, children) {
   let div = document.createElement('div');
   div.className = 'xxm';
   if (props.style) { div.style = props.style }
+  div.append(...children);
+  return div;
+}
+
+xxm.map = function(props, children) {
+  let div = document.createElement('div');
+  div.className = 'map';
+  if (props.style) { div.style = props.style }
   if (props.bgImage) { div.style.backgroundImage = `url("${props.bgImage}")` }
   if (props.tilesetImage) { div.style.setProperty('--tileset-image', `url("${props.tilesetImage}")`) }
   div.roadblocks = props.roadblocks;
   div.append(...children);
   return div;
-}
+};
 
 xxm.layer = function(children) {
   let div = document.createElement('div');
@@ -186,5 +194,7 @@ xxm.onAction = async function() {
   let sprite2 = xxm.findSprite(root, nsx, nsy);
   await sprite2?.props?.onAction?.();
 };
+
+xxm.ui = () => document.createElement('div');
 
 export default xxm;
