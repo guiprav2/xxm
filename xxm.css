@@ -19,6 +19,7 @@ body {
 .xxm {
   position: relative;
   display: flex;
+  overflow: hidden;
   font-size: 20px;
   font-family: sntregular;
   text-shadow: 1px 1px black;
