@@ -3,6 +3,8 @@
 <link rel="stylesheet" href="xxm.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 <link rel="preload" href="msgbox.png" as="image">
+<link rel="preload" href="Attack2.ogg" as="audio">
+<link rel="preload" href="Absorb1.ogg" as="audio">
 
 <style>
   * { box-sizing: border-box }
@@ -30,7 +32,14 @@
           dracula = xxm.sprite(4, 1, 'dracula.png', '111px', '62px', {
             onAction: async () => {
               await xxm.ui.msgbox('THIS IS DRACULA.');
-              await xxm.sprite.animate(dracula, 'shakeX');
+              await Promise.all([
+                xxm.playSound('Attack2.ogg'),
+                xxm.sprite.animate(dracula, 'flip'),
+              ]);
+              await Promise.all([
+                xxm.playSound('Absorb1.ogg'),
+                xxm.sprite.animate(dracula, 'flash'),
+              ]);
               await xxm.ui.msgbox('YOU NO MORE NOW.');
             },
           }),

@@ -256,4 +256,17 @@ msgboxFrame.onKeyDown = function(ev) {
   done.state.resolve();
 };
 
+xxm.playSound = function(url) {
+  let audio = document.createElement('audio');
+  let resolve, promise = new Promise(res => resolve = res);
+  audio.src = url;
+  audio.autoplay = true;
+  xxm.ui.el.append(audio);
+  audio.addEventListener('ended', () => {
+    audio.remove();
+    resolve();
+  }, { once: true });
+  return promise;
+};
+
 export default xxm;
