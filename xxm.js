@@ -195,7 +195,9 @@ xxm.onAction = async function() {
   }
 
   let sprite2 = xxm.findSprite(root, nsx, nsy);
+  root.classList.add('locked');
   await sprite2?.props?.onAction?.();
+  root.classList.remove('locked');
 };
 
 xxm.ui = function() {
@@ -213,7 +215,6 @@ xxm.ui.msgbox = function(text) {
   div.state = { i: 0, text, resolve };
   requestAnimationFrame(() => msgboxFrame(div));
   xxm.ui.el.append(div);
-  xxm.ui.el.closest('.xxm').classList.add('locked');
   return promise;
 };
 
@@ -239,10 +240,8 @@ function msgboxFrame(div) {
 msgboxFrame.onKeyDown = function(ev) {
   if (ev.key !== 'z') { return }
   let { done } = msgboxFrame;
-  let root = done.closest('.xxm');
   done.remove();
   removeEventListener('keydown', msgboxFrame.onKeyDown);
-  root.classList.remove('locked');
   done.state.resolve();
 };
 
