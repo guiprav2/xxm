@@ -71,15 +71,15 @@ xxm.findSprite = function(root, x, y) {
 };
 
 xxm.spriteUnblocked = function(sprite) {
-  let root = sprite.closest('.xxm');
+  let map = sprite.closest('.map');
   let sx = Number(sprite.style.getPropertyValue('--x'));
   let sy = Number(sprite.style.getPropertyValue('--y'));
   let dir = sprite.style.getPropertyValue('--sy') || '0';
 
-  for (let tile of xxm.findTiles(root, sx, sy)) {
+  for (let tile of xxm.findTiles(map, sx, sy)) {
     let tx = Number(tile.style.getPropertyValue('--tx'));
     let ty = Number(tile.style.getPropertyValue('--ty'));
-    let roadblocks = root.roadblocks[ty][tx] || 'OOOO';
+    let roadblocks = map.roadblocks[ty][tx] || 'OOOO';
     if (roadblocks[dir] === 'X') { return false }
   }
 
@@ -91,14 +91,14 @@ xxm.spriteUnblocked = function(sprite) {
     case '3': nsx--; incomingDir = 2; break;
   }
 
-  for (let tile of xxm.findTiles(root, nsx, nsy)) {
+  for (let tile of xxm.findTiles(map, nsx, nsy)) {
     let tx = Number(tile.style.getPropertyValue('--tx'));
     let ty = Number(tile.style.getPropertyValue('--ty'));
-    let roadblocks = root.roadblocks[ty][tx] || 'OOOO';
+    let roadblocks = map.roadblocks[ty][tx] || 'OOOO';
     if (roadblocks[incomingDir] === 'X') { return false }
   }
 
-  return !xxm.findSprite(root, nsx, nsy);
+  return !xxm.findSprite(map, nsx, nsy);
 };
 
 xxm.hero = function(spr) {
@@ -115,7 +115,7 @@ addEventListener('keydown', ev => {
     case 'ArrowUp': kbdst.up ??= 0; kbdst.up++; kbdst.last = 'up'; break;
     case 'ArrowRight': kbdst.right ??= 0; kbdst.right++; kbdst.last = 'right'; break;
     case 'ArrowLeft': kbdst.left ??= 0; kbdst.left++; kbdst.last = 'left'; break;
-    case 'x': xxm.onAction(); break;
+    case 'z': xxm.onAction(); break;
     default: return;
   }
 });
@@ -134,7 +134,8 @@ function walkFrame() {
   requestAnimationFrame(walkFrame);
 
   let { sprite } = xxm.hero;
-  if (!sprite || sprite.classList.contains('walking')) { return }
+  let root = sprite?.closest?.('.xxm');
+  if (!sprite || sprite.classList.contains('walking') || root.classList.contains('locked')) { return }
 
   if (kbdst[kbdst.last]) {
     sprite.classList.add('walking');
@@ -177,7 +178,8 @@ walkFrame();
 
 xxm.onAction = async function() {
   let { sprite } = xxm.hero;
-  if (!sprite || sprite.classList.contains('walking')) { return }
+  let root = sprite?.closest?.('.xxm');
+  if (!sprite || sprite.classList.contains('walking') || root.classList.contains('locked')) { return }
 
   let sx = Number(sprite.style.getPropertyValue('--x'));
   let sy = Number(sprite.style.getPropertyValue('--y'));
@@ -190,11 +192,56 @@ xxm.onAction = async function() {
     case '3': nsx--; break;
   }
 
-  let root = sprite.closest('.xxm');
   let sprite2 = xxm.findSprite(root, nsx, nsy);
   await sprite2?.props?.onAction?.();
 };
 
-xxm.ui = () => document.createElement('div');
+xxm.ui = function() {
+  let div = document.createElement('div');
+  div.className = 'ui';
+  //requestAnimationFrame(() => xxm.ui.msgbox('This is an example message.'));
+  xxm.ui.el = div;
+  return div;
+};
+
+xxm.ui.msgbox = function(text) {
+  let div = document.createElement('div');
+  div.className = 'msgbox';
+  let resolve, promise = new Promise(res => resolve = res);
+  div.state = { i: 0, text, resolve };
+  requestAnimationFrame(() => msgboxFrame(div));
+  xxm.ui.el.append(div);
+  return promise;
+};
+
+function msgboxFrame(div) {
+  let { state } = div;
+  if (div.classList.contains('done')) { return }
+  requestAnimationFrame(() => msgboxFrame(div));
+  let root = div.closest('.xxm');
+  if (state.i === 0) { root.classList.add('locked') }
+  state.i++;
+  div.textContent = state.text.slice(0, state.i);
+
+  if (div.textContent.length >= state.text.length) {
+    let cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    cursor.textContent = ' ▼';
+    div.append(cursor);
+    div.classList.add('done');
+    msgboxFrame.done = div;
+    addEventListener('keydown', msgboxFrame.onKeyDown);
+  }
+}
+
+msgboxFrame.onKeyDown = function(ev) {
+  if (ev.key !== 'z') { return }
+  let { done } = msgboxFrame;
+  let root = done.closest('.xxm');
+  done.remove();
+  removeEventListener('keydown', msgboxFrame.onKeyDown);
+  root.classList.remove('locked');
+  done.state.resolve();
+};
 
 export default xxm;

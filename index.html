@@ -25,7 +25,9 @@
           xxm.tile(2, 2, 0, 1),
           xxm.hero(xxm.sprite(1, 2, 'siren.png', '78px', '48px')),
           xxm.sprite(4, 1, 'dracula.png', '111px', '62px', {
-            onAction: () => alert('DRACULA'),
+            onAction: async () => {
+              await xxm.ui.msgbox('THIS IS DRACULA.');
+            },
           }),
         ]),
       ]),

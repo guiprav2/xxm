@@ -1,3 +1,8 @@
+@font-face {
+  font-family: sntregular;
+  src: url("sntregular.ttf");
+}
+
 :root {
   --tw: 32px;
   --th: 32px;
@@ -12,7 +17,11 @@ body {
 }
 
 .xxm {
+  position: relative;
   display: flex;
+  font-size: 20px;
+  font-family: sntregular;
+  text-shadow: 1px 1px black;
 }
 
 .xxm .map {
@@ -71,4 +80,40 @@ body {
 .xxm .map .sprite.walking > div {
   animation: frames steps(4, end) infinite;
   animation-duration: var(--anim-duration);
+}
+
+.xxm .ui {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.xxm .ui .msgbox {
+  position: absolute;
+  left: 64px;
+  right: 64px;
+  bottom: 64px;
+  border-image: url("msgbox.png") 7;
+  border-style: solid;
+  padding: 16px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  pointer-events: auto;
+}
+
+@keyframes flash {
+  0%, 50%, to { opacity: 1 }
+  25%, 75% { opacity: 0 }
+}
+
+.xxm .ui .msgbox .cursor {
+  display: inline-block;
+  transform: scale(80%);
+  animation-name: flash;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
 }
