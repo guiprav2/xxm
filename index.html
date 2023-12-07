@@ -6,11 +6,11 @@
   * { box-sizing: border-box }
 </style>
 
-<body style="display: flex; flex-direction: column; min-height: 100vh; padding: 32px; background-image: url('bg.png')">
+<body style="display: flex; justify-content: center; padding: 32px; background-image: url('bg.png')">
   <script type="module">
     import xxm from './xxm.js';
 
-    document.body.append(xxm({ style: 'flex: 1' }, [
+    document.body.append(xxm('640px', '480px', {}, [
       xxm.map({
         bgImage: 'dungeon_ground.png',
         tilesetImage: 'dungeon.png',

@@ -1,7 +1,9 @@
-function xxm(props, children) {
+function xxm(width, height, props, children) {
   let div = document.createElement('div');
   div.className = 'xxm';
   if (props.style) { div.style = props.style }
+  div.style.width = width;
+  div.style.height = height;
   div.append(...children);
   return div;
 }
