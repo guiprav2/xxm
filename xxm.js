@@ -213,6 +213,7 @@ xxm.ui.msgbox = function(text) {
   div.state = { i: 0, text, resolve };
   requestAnimationFrame(() => msgboxFrame(div));
   xxm.ui.el.append(div);
+  xxm.ui.el.closest('.xxm').classList.add('locked');
   return promise;
 };
 
@@ -221,7 +222,6 @@ function msgboxFrame(div) {
   if (div.classList.contains('done')) { return }
   requestAnimationFrame(() => msgboxFrame(div));
   let root = div.closest('.xxm');
-  if (state.i === 0) { root.classList.add('locked') }
   state.i++;
   div.textContent = state.text.slice(0, state.i);
 
