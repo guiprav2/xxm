@@ -114,6 +114,12 @@ xxm.tile = function(x, y, tx, ty) {
     div.style.setProperty(k, v);
   }
 
+  requestAnimationFrame(() => {
+    let map = xxm.root.querySelector('.map');
+    let roadblocks = map.roadblocks[ty]?.[tx] || 'OOOO';
+    if (roadblocks[4] === 'H') { div.style.setProperty('--high', 1) }
+  });
+
   return div;
 };
 

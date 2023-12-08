@@ -41,6 +41,7 @@ body {
   height: var(--th);
   background-image: var(--tileset-image);
   background-position: calc(var(--tx) * var(--tw) * -1) calc(var(--ty) * var(--th) * -1);
+  z-index: calc(var(--y) + var(--high));
 }
 
 .xxm .map .sprite {
