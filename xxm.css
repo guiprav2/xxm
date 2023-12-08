@@ -28,6 +28,7 @@ body {
 .xxm .map {
   position: relative;
   flex: 1;
+  background-image: var(--bg-image);
   background-size: var(--tw) var(--th);
   background-repeat: repeat;
 }
@@ -57,8 +58,15 @@ body {
 }
 
 .xxm .map .tileset {
-  outline: none;
+  display: flex;
+  outline: 4px solid #00000060;
+  border: 0;
+  border-radius: 6px;
   padding: 0;
+}
+
+.xxm .map .tileset > img {
+  background-image: var(--bg-image);
 }
 
 .xxm .map > .cursor .sprite {

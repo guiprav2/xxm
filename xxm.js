@@ -14,7 +14,7 @@ xxm.map = function(props, children) {
   let div = document.createElement('div');
   div.className = 'map';
   if (props.style) { div.style = props.style }
-  if (props.bgImage) { div.style.backgroundImage = `url("${props.bgImage}")` }
+  if (props.bgImage) { div.style.setProperty('--bg-image', `url("${props.bgImage}")`) }
   if (props.tilesetImage) { div.style.setProperty('--tileset-image', `url("${props.tilesetImage}")`) }
   div.roadblocks = props.roadblocks;
   div.append(...children);
