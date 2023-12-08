@@ -56,6 +56,11 @@ body {
   z-index: var(--y);
 }
 
+.xxm .map .tileset {
+  outline: none;
+  padding: 0;
+}
+
 .xxm .map > .cursor .sprite {
   left: 0;
   top: 0;

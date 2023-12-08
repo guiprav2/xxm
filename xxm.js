@@ -31,10 +31,36 @@ xxm.map = function(props, children) {
   return div;
 };
 
+addEventListener('keydown', ev => {
+  if (!xxm.root.state.editMode) { return }
+  switch (ev.key) {
+    case 't': {
+      if (xxm.root.querySelector('.map .tileset')) { return }
+      xxm.map.setCursor(null);
+      let dialog = document.createElement('dialog');
+      dialog.className = 'tileset';
+      dialog.addEventListener('close', () => dialog.remove());
+      let img = document.createElement('img');
+      let map = xxm.root.querySelector('.map');
+      img.src = map.style.getPropertyValue('--tileset-image').slice(5, -2);
+      img.addEventListener('click', ev => {
+        let tx = Math.floor(ev.layerX / 32);
+        let ty = Math.floor(ev.layerY / 32);
+        xxm.map.setCursor(xxm.tile(0, 0, tx, ty));
+        dialog.remove();
+      });
+      dialog.append(img);
+      map.append(dialog);
+      dialog.showModal();
+      break;
+    }
+  }
+});
+
 xxm.map.setCursor = function(div) {
   let { editModeCursor } = xxm.root.state;
   editModeCursor.innerHTML = '';
-  editModeCursor.append(div);
+  div && editModeCursor.append(div);
 };
 
 xxm.map.onMouseMove = function(ev) {
@@ -115,7 +141,7 @@ xxm.spriteUnblocked = function(sprite) {
   for (let tile of xxm.findTiles(map, sx, sy)) {
     let tx = Number(tile.style.getPropertyValue('--tx'));
     let ty = Number(tile.style.getPropertyValue('--ty'));
-    let roadblocks = map.roadblocks[ty][tx] || 'OOOO';
+    let roadblocks = map.roadblocks[ty]?.[tx] || 'OOOO';
     if (roadblocks[dir] === 'X') { return false }
   }
 
@@ -130,7 +156,7 @@ xxm.spriteUnblocked = function(sprite) {
   for (let tile of xxm.findTiles(map, nsx, nsy)) {
     let tx = Number(tile.style.getPropertyValue('--tx'));
     let ty = Number(tile.style.getPropertyValue('--ty'));
-    let roadblocks = map.roadblocks[ty][tx] || 'OOOO';
+    let roadblocks = map.roadblocks[ty]?.[tx] || 'OOOO';
     if (roadblocks[incomingDir] === 'X') { return false }
   }
 
