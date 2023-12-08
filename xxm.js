@@ -34,6 +34,10 @@ xxm.map = function(props, children) {
 addEventListener('keydown', ev => {
   if (!xxm.root.state.editMode) { return }
   switch (ev.key) {
+    case 'Escape':
+      xxm.map.setCursor(null);
+      break;
+
     case 't': {
       if (xxm.root.querySelector('.map .tileset')) { return }
       xxm.map.setCursor(null);
