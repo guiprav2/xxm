@@ -43,11 +43,6 @@ body {
   background-position: calc(var(--tx) * var(--tw) * -1) calc(var(--ty) * var(--th) * -1);
 }
 
-.xxm .map > .cursor .tile {
-  left: 0;
-  top: 0;
-}
-
 .xxm .map .sprite {
   position: absolute;
   left: calc(var(--x) * var(--tw));
@@ -107,8 +102,8 @@ body {
   position: absolute;
   left: calc(var(--x) * var(--tw));
   top: calc(var(--y) * var(--th));
-  width: var(--tw);
-  height: var(--th);
+  width: calc(var(--cw) * var(--tw));
+  height: calc(var(--ch) * var(--th));
   z-index: 100000;
 }
 

@@ -47,10 +47,21 @@ addEventListener('keydown', ev => {
       let img = document.createElement('img');
       let map = xxm.root.querySelector('.map');
       img.src = map.style.getPropertyValue('--tileset-image').slice(5, -2);
-      img.addEventListener('click', ev => {
-        let tx = Math.floor(ev.layerX / 32);
-        let ty = Math.floor(ev.layerY / 32);
-        xxm.map.setCursor(xxm.tile(0, 0, tx, ty));
+      img.addEventListener('mousedown', ev => {
+        ev.preventDefault();
+        img.txStart = Math.floor(ev.layerX / 32);
+        img.tyStart = Math.floor(ev.layerY / 32);
+      });
+      img.addEventListener('mouseup', ev => {
+        let txEnd = Math.floor(ev.layerX / 32) + 1;
+        let tyEnd = Math.floor(ev.layerY / 32) + 1;
+        let tiles = [];
+        for (let ty = img.tyStart; ty < tyEnd; ty++) {
+          for (let tx = img.txStart; tx < txEnd; tx++) {
+            tiles.push(xxm.tile(tx - img.txStart, ty - img.tyStart, tx, ty));
+          }
+        }
+        xxm.map.setCursor(tiles, txEnd - img.txStart, tyEnd - img.tyStart);
         dialog.remove();
       });
       dialog.append(img);
@@ -61,10 +72,14 @@ addEventListener('keydown', ev => {
   }
 });
 
-xxm.map.setCursor = function(div) {
+xxm.map.setCursor = function(divs, width = 1, height = 1) {
   let { editModeCursor } = xxm.root.state;
   editModeCursor.innerHTML = '';
-  div && editModeCursor.append(div);
+  if (!divs) { return }
+  if (!Array.isArray(divs)) { divs = [divs] }
+  editModeCursor.style.setProperty('--cw', width);
+  editModeCursor.style.setProperty('--ch', height);
+  editModeCursor.append(...divs);
 };
 
 xxm.map.onMouseMove = function(ev) {
@@ -80,14 +95,15 @@ xxm.map.onMouseMove = function(ev) {
 xxm.map.onCursorClick = function(ev) {
   let cursor = ev.target.closest('.cursor');
   let map = cursor.closest('.map');
-  let unit = cursor.childNodes[0]?.cloneNode?.(true);
-  if (!unit) { return }
-  let x = Number(cursor.style.getPropertyValue('--x'));
-  let y = Number(cursor.style.getPropertyValue('--y'));
-  for (let tile of xxm.findTiles(map, x, y)) { tile.remove() }
-  unit.style.setProperty('--x', x);
-  unit.style.setProperty('--y', y);
-  map.append(unit);
+  for (let unit of cursor.childNodes) {
+    unit = unit.cloneNode(true);
+    let x = Number(cursor.style.getPropertyValue('--x')) + Number(unit.style.getPropertyValue('--x'));
+    let y = Number(cursor.style.getPropertyValue('--y')) + Number(unit.style.getPropertyValue('--y'));
+    for (let tile of xxm.findTiles(map, x, y)) { tile.remove() }
+    unit.style.setProperty('--x', x);
+    unit.style.setProperty('--y', y);
+    map.append(unit);
+  }
 };
 
 xxm.tile = function(x, y, tx, ty) {
